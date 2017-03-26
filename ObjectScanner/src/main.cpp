@@ -16,7 +16,7 @@ using namespace pcl;
 int main(int _argc, char ** _argv) {
 
 	// Create application
-	app::fruitSearcher::MainApplication app;
+	app::ObjectScanner::MainApplication app;
 	
 	// Initialize with input parameters
 	if (!app.init(_argc, _argv)) {
@@ -26,7 +26,7 @@ int main(int _argc, char ** _argv) {
 	int stepCounter = 0;
 	bool result = false;
 	do {
-		std::cout << "-------------------------------- Step: " << stepCounter++ <<"-------------------------------------" << std::endl;
+		//std::cout << "-------------------------------- Step: " << stepCounter++ <<"-------------------------------------" << std::endl;
 		result = app.step();
 	}while(/*result &&*/ !rgbd::Gui::get()->hasReceivedStopSignal());
 	

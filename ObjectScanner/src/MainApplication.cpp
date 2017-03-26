@@ -24,7 +24,7 @@ using namespace rgbd;
 using namespace Eigen;
 
 namespace app {
-	namespace fruitSearcher {
+	namespace ObjectScanner {
 		//---------------------------------------------------------------------------------------------------------------------
 		bool MainApplication::init(int _argc, char ** _argv) {
 			// Check minimal arguments
@@ -96,7 +96,26 @@ namespace app {
 					mStop = !mStop;
 				}
 			});
+			
+			mPlatformPort = new serial::Serial("/dev/ttyUSB0", 115200);
+			std::this_thread::sleep_for(std::chrono::seconds(3));
+			while(mPlatformPort->available()){
+				mPlatformPort->read();
+			}
+
+			if(mPlatformPort == nullptr || !mPlatformPort->isOpen()){
+				std::cout << "Error opening serial port" << std::endl;
+				return false;
+			}else{
+				mPlatformPort->write("F100\r\n");
+				while(mPlatformPort->available()){
+					mPlatformPort->read();
+				}
+				std::cout << "Initilized serial port" << std::endl;
+			}
+
 			return true;
+
 		}
 
 		//---------------------------------------------------------------------------------------------------------------------
@@ -106,6 +125,25 @@ namespace app {
 					std::this_thread::sleep_for(std::chrono::milliseconds(100));
 				}
 			}
+
+			if(mPlatformPort == nullptr || !mPlatformPort->isOpen()){
+				std::cout << "Error with serial port" << std::endl;
+				return false;
+			}
+
+			// MovePlatform
+			std::string code = "G1 X"+std::to_string(mCurrentAngle)+"\r\n";
+			//std::cout << "Sending code: " << code << std::endl;
+			size_t bytes_wrote = mPlatformPort->write(code);
+			while(mPlatformPort->available()){
+				mPlatformPort->read();
+			}
+			if(bytes_wrote != code.size()){
+				std::cout << "Error with serial port" << std::endl;
+			}
+
+			mCurrentAngle += 30;
+			if(mCurrentAngle >= 360) mCurrentAngle = 0;
 
             PointCloud<PointXYZRGBNormal> newCloud;
 			// Get new data
@@ -123,16 +161,13 @@ namespace app {
 			// Plot cloud
 			Gui::get()->clean(0);
 			Gui::get()->showCloud(newCloud, "newCloud", 5, 0, 0);
-			auto t0 = std::chrono::steady_clock::now();
+			std::this_thread::sleep_for(std::chrono::seconds(1));
 			// Update map
 			if (mRecording) {
-				if (!stepUpdateMap(newCloud)) {
-					std::cout << "[MAIN APPLICATION] Something failed updating the map." << std::endl;
-					return false;
-				}
-				auto t1 = std::chrono::steady_clock::now();
-
-				std::cout << "[MAIN APPLICATION] Updating the map took: " << std::chrono::duration<double>(t1 - t0).count() << std::endl;
+				//if (!stepUpdateMap(newCloud)) {
+				//	std::cout << "[MAIN APPLICATION] Something failed updating the map." << std::endl;
+				//	return false;
+				//}
 			}
 			return true;
 		}
@@ -171,6 +206,12 @@ namespace app {
 			else {
 				return false;
 			}
+		}
+
+		//---------------------------------------------------------------------------------------------------------------------
+		bool MainApplication::filterDataCylinder(pcl::PointCloud<pcl::PointXYZRGBNormal> &_cloud){
+
+
 		}
 	}	//	namespace fruitSearcher
 }	//	namespace app

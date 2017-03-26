@@ -71,6 +71,9 @@ find_package(OpenMP REQUIRED)
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 
+## Find serial
+
+find_package(serial REQUIRED)
 #########################################
 ######			Executable		   ######
 #########################################
@@ -88,6 +91,9 @@ target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${PCL_LIBRARIES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${ARTEC_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${ARTEC_LIBS})
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${serial_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${serial_LIBRARIES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../dep/rgbd_slam)
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC rgbdSlam)

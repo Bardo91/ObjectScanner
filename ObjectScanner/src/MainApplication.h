@@ -13,10 +13,10 @@
 #include <rgbd_slam/StereoCamera.h>
 
 #include <cjson/json.h>
-
+#include <serial/serial.h>
 
 namespace app {
-	namespace fruitSearcher {
+	namespace ObjectScanner {
 		/// \brief application that holds the main pipeline of the fruit searcher application
 		class MainApplication {
 		public:		// Public interface
@@ -61,7 +61,9 @@ namespace app {
 		private:
 			bool stepData(pcl::PointCloud<pcl::PointXYZRGBNormal> &_cloud);
 			bool stepUpdateMap(pcl::PointCloud<pcl::PointXYZRGBNormal> &_cloud);
-			
+			bool filterDataCylinder(pcl::PointCloud<pcl::PointXYZRGBNormal> &_cloud);
+
+
 		private:	// Members
 			rgbd::StereoCamera		*mStereoCamera = nullptr;
 			rgbd::EnvironmentMap	mMap;
@@ -70,6 +72,9 @@ namespace app {
 			cjson::Json mConfigFile;
 			unsigned mStoreIndex = 0;
 			std::string mBaseName;
+
+			serial::Serial *mPlatformPort;
+			unsigned mCurrentAngle = 0;
 		};	//	class MainApplication
 	}	//	namespace fruitSearcher
 }	//	namespace app
