@@ -89,5 +89,5 @@ target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${PCL_LIBRARIES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${ARTEC_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${ARTEC_LIBS})
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../../libraries/rgbd_slam)
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../dep/rgbd_slam)
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC rgbdSlam)

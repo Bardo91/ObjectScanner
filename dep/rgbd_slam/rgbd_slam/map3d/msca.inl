@@ -258,7 +258,7 @@ namespace rgbd {
 	//---------------------------------------------------------------------------------------------------------------------
 	template<typename PointType_>
 	inline void Msca<PointType_>::colorDistance(double &_distance) {
-		mMaxColorDistance = _ distance;
+		mMaxColorDistance = _distance;
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------
