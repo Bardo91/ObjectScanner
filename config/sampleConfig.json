@@ -15,7 +15,7 @@
 							"resolution":640,
 							"fps":30
 						},
-					"useUncolorizedPoints":false
+					"useUncolorizedPoints":true
 				}
 		},
 	"mapping":
@@ -29,7 +29,8 @@
 		 		"correspondenceDistance":0.3,
 		 		"indexStaticCloud":0,
 		 		"samplingFactor":0.5,
-				"queueSize":2
+				"queueSize":2,
+				"angleThreshold":45
 			},
 		"voxelSize":0.001
 		}
